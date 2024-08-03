@@ -3,7 +3,7 @@ import { compilerOptions } from './tsconfig.json'
 
 export default {
   moduleFileExtensions: ['js', 'json', 'ts'],
-  moduleMapperName: pathsToModuleNameMapper(compilerOptions.paths, {
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>/',
   }),
   testRegex: '.*\\.int-spec\\.ts$',

@@ -13,8 +13,9 @@ export class AuthorsPrismaRepository implements IAuthorsRepository {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  create(data: ICreateAuthor): Promise<Author> {
-    throw new Error('Method not implemented.')
+  async create(data: ICreateAuthor): Promise<Author> {
+    const author = await this.prisma.author.create({ data })
+    return author
   }
 
   update(author: Author): Promise<Author> {

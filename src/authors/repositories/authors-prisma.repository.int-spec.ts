@@ -40,4 +40,12 @@ describe('AuthorsPrismaRepository Integration Tests', () => {
       expect(result).toStrictEqual(author)
     })
   })
+
+  describe('should test create method', () => {
+    test('should create an author', async () => {
+      const data = AuthorDataBuilder({})
+      const author = await repository.create(data)
+      expect(author).toMatchObject(data)
+    })
+  })
 })

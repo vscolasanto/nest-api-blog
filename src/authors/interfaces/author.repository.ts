@@ -4,7 +4,7 @@ import { ICreateAuthor } from './create-author'
 export type SearchParams = {
   page?: number
   perPage?: number
-  filer?: string
+  filter?: string
   sort?: string
   sortDir?: 'asc' | 'desc'
 }

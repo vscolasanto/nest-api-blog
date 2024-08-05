@@ -116,11 +116,11 @@ describe('AuthorsPrismaRepository Integration Tests', () => {
 
   describe('search method', () => {
     test('should apply default params when params are not provided', async () => {
-      const createAt = new Date()
+      const createdAt = new Date()
       const data = []
       const arrange = Array(16).fill(AuthorDataBuilder({}))
       arrange.forEach((element, index) => {
-        const timestamp = createAt.getTime() + index
+        const timestamp = createdAt.getTime() + index
         data.push({
           ...element,
           email: `author${index}@a.com`,
@@ -136,16 +136,16 @@ describe('AuthorsPrismaRepository Integration Tests', () => {
         expect(item.id).toBeDefined()
       })
       result.items.reverse().forEach((item, index) => {
-        expect(`${item.email}${index + 1}@a.com`)
+        expect(item.email).toEqual(`author${index + 1}@a.com`)
       })
     })
 
     test('should apply pagination and ordering', async () => {
-      const createAt = new Date()
+      const createdAt = new Date()
       const data = []
       const arrange = 'gbafecd'
       arrange.split('').forEach((element, index) => {
-        const timestamp = createAt.getTime() + index
+        const timestamp = createdAt.getTime() + index
         data.push({
           ...AuthorDataBuilder({ name: element }),
           email: `author${index}@a.com`,
@@ -191,11 +191,11 @@ describe('AuthorsPrismaRepository Integration Tests', () => {
     })
 
     test('should apply pagination, filtering and ordering', async () => {
-      const createAt = new Date()
+      const createdAt = new Date()
       const data = []
       const arrange = ['test', 'a', 'TEST', 'b', 'Test']
       arrange.forEach((element, index) => {
-        const timestamp = createAt.getTime() + index
+        const timestamp = createdAt.getTime() + index
         data.push({
           ...AuthorDataBuilder({ name: element }),
           email: `author${index}@a.com`,

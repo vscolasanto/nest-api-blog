@@ -45,7 +45,7 @@ export class AuthorsPrismaRepository implements IAuthorsRepository {
     const { page = 1, perPage = 15, filter, sort, sortDir } = params
     const sortable = this.sortableFields.includes(sort) || false
     const orderByField = sortable ? sort : 'createdAt'
-    const orderByDir = sortable ? sortDir : 'asc'
+    const orderByDir = sortable ? sortDir : 'desc'
 
     const count = await this.prisma.author.count({
       ...(filter && {

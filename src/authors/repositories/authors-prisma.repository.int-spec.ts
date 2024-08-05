@@ -26,9 +26,9 @@ describe('AuthorsPrismaRepository Integration Tests', () => {
   })
 
   describe('findById method', () => {
-    test('should throws not found error when id is not found', async () => {
+    test('should throw not found error when id is not found', async () => {
       const uuid = '76d94a09-46a7-4cf5-be68-e8528e510f37'
-      expect(repository.findById(uuid)).rejects.toThrow(
+      await expect(repository.findById(uuid)).rejects.toThrow(
         new NotFoundError(`Author not found using ID: ${uuid}`),
       )
     })
@@ -46,6 +46,71 @@ describe('AuthorsPrismaRepository Integration Tests', () => {
       const data = AuthorDataBuilder({})
       const author = await repository.create(data)
       expect(author).toMatchObject(data)
+    })
+  })
+
+  describe('update method', () => {
+    test('should throw not found error when trying to update an author that is not found', async () => {
+      const data = AuthorDataBuilder({})
+      const author = {
+        id: '76d94a09-46a7-4cf5-be68-e8528e510f37',
+        ...data,
+      }
+      await expect(repository.update(author)).rejects.toThrow(
+        new NotFoundError(`Author not found using ID: ${author.id}`),
+      )
+    })
+
+    test('should update an author', async () => {
+      const data = AuthorDataBuilder({})
+      const author = await prisma.author.create({ data })
+      await repository.update({ ...author, name: 'new name' })
+      const filteredAuthor = await prisma.author.findUnique({
+        where: { id: author.id },
+      })
+      expect(filteredAuthor.name).toBe('new name')
+    })
+  })
+
+  describe('delete method', () => {
+    test('should throw not found error when trying to delete an author that is not found', async () => {
+      const uuid = '76d94a09-46a7-4cf5-be68-e8528e510f37'
+      await expect(repository.delete(uuid)).rejects.toThrow(
+        new NotFoundError(`Author not found using ID: ${uuid}`),
+      )
+    })
+
+    test('should delete an author', async () => {
+      const data = AuthorDataBuilder({})
+      const author = await prisma.author.create({ data })
+      const foundAuthor = await prisma.author.findUnique({
+        where: { id: author.id },
+      })
+      expect(foundAuthor).not.toBeNull()
+      await repository.delete(author.id)
+      const deletedAuthor = await prisma.author.findUnique({
+        where: { id: author.id },
+      })
+      expect(deletedAuthor).toBeNull()
+    })
+  })
+
+  describe('findByEmail method', () => {
+    test('should return null when an author is not found by email', async () => {
+      const author = await repository.findByEmail('author@a.com')
+      expect(author).toBeNull()
+    })
+
+    test('should return an author by email', async () => {
+      const data = {
+        ...AuthorDataBuilder({}),
+        email: 'author@a.com',
+      }
+      const authorBeforeCreate = await repository.findByEmail('author@a.com')
+      expect(authorBeforeCreate).toBeNull()
+      await prisma.author.create({ data })
+      const authorAfterCreate = await repository.findByEmail('author@a.com')
+      expect(authorAfterCreate).not.toBeNull()
     })
   })
 

@@ -1,19 +1,14 @@
 import { BadRequestError } from '@/shared/errors/bad-request-error'
 import { AuthorsPrismaRepository } from '../repositories/authors-prisma.repository'
 import { IUsecase } from '@/shared/interfaces/usecase.interface'
+import { AuthorOutput } from '../dt/author-output.dto'
 
 export namespace GetAuthorUsecase {
-  type Base = {
+  type Input = {
     id: string
   }
 
-  export type Input = Base
-
-  export type Output = Base & {
-    name: string
-    email: string
-    createdAt: Date
-  }
+  export type Output = AuthorOutput
 
   export class Usecase implements IUsecase<Input, Output> {
     constructor(private authorsRepository: AuthorsPrismaRepository) {}

@@ -18,28 +18,27 @@ export class AuthorsPrismaRepository implements IAuthorsRepository {
     return author
   }
 
-  update(author: Author): Promise<Author> {
-    throw new Error('Method not implemented.')
+  async update(author: Author): Promise<Author> {
+    await this.get(author.id)
+    const updatedAuthor = await this.prisma.author.update({
+      where: { id: author.id },
+      data: author,
+    })
+    return updatedAuthor
   }
 
-  delete(id: string): Promise<Author> {
-    throw new Error('Method not implemented.')
+  async delete(id: string): Promise<Author> {
+    const author = await this.get(id)
+    await this.prisma.author.delete({ where: { id } })
+    return author
   }
 
   async findById(id: string): Promise<Author> {
     return await this.get(id)
   }
 
-  findAll(): Promise<Author[]> {
-    throw new Error('Method not implemented.')
-  }
-
-  findByName(name: string): Promise<Author[]> {
-    throw new Error('Method not implemented.')
-  }
-
-  findByEmail(email: string): Promise<Author[]> {
-    throw new Error('Method not implemented.')
+  async findByEmail(email: string): Promise<Author> {
+    return this.prisma.author.findUnique({ where: { email } })
   }
 
   async search(params: SearchParams): Promise<SearchResult> {

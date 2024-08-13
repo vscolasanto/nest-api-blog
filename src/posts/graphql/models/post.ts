@@ -23,5 +23,5 @@ export class Post {
   createdAt: Date
 
   @Field()
-  updatedAt: Date
+  updatedAt?: Date
 }

@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { Post } from '../graphql/models/post'
 
-export function PostsDataBuilder(
+export function PostDataBuilder(
   props: Partial<Post>,
 ): Omit<Post, 'id' | 'authorId'> {
   return {

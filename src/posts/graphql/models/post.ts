@@ -21,7 +21,4 @@ export class Post {
 
   @Field()
   createdAt: Date
-
-  @Field()
-  updatedAt?: Date
 }

@@ -6,8 +6,8 @@ import { NotFoundError } from '@/shared/errors/not-found-error'
 export class PostsPrismaRepository implements PostsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(data: Omit<Post, 'id'>): Promise<Post> {
-    throw new Error('Method not implemented.')
+  async create(data: Omit<Post, 'id'>): Promise<Post> {
+    return await this.prisma.post.create({ data })
   }
 
   update(post: Post): Promise<Post> {

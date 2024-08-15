@@ -50,4 +50,17 @@ describe('PostsPrismaRepository Integration Tests', () => {
       expect(result).toStrictEqual(post)
     })
   })
+
+  describe('create method', () => {
+    it('should create a post', async () => {
+      const postData = PostDataBuilder({})
+      const authorData = AuthorDataBuilder({})
+      const author = await prisma.author.create({ data: authorData })
+      const result = await repository.create({
+        ...postData,
+        authorId: author.id,
+      })
+      expect(result).toMatchObject(postData)
+    })
+  })
 })

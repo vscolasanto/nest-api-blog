@@ -3,6 +3,7 @@ import { AuthorsPrismaRepository } from '../repositories/authors-prisma.reposito
 import { ConflictError } from '@/shared/errors/conflict-error'
 import { IUsecase } from '@/shared/interfaces/usecase.interface'
 import { AuthorOutput } from '../dt/author-output.dto'
+import { getErrorMessage } from '@/shared/constants/messages.constants'
 
 export namespace CreateAuthorUsecase {
   type Input = {
@@ -23,11 +24,11 @@ export namespace CreateAuthorUsecase {
         typeof name !== 'string' ||
         typeof email !== 'string'
       ) {
-        throw new BadRequestError(`Input data is not provided or invalid`)
+        throw new BadRequestError(getErrorMessage().inputDataInvalid)
       }
       const emailExists = await this.authorsRepository.findByEmail(email)
       if (emailExists) {
-        throw new ConflictError(`Email address already in use`)
+        throw new ConflictError(getErrorMessage().emailAlreadyExists)
       }
       const author = await this.authorsRepository.create(input)
       return author

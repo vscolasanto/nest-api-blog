@@ -4,6 +4,7 @@ import { PrismaClient } from '@prisma/client'
 import { execSync } from 'node:child_process'
 import { NotFoundError } from '@/shared/errors/not-found-error'
 import { AuthorDataBuilder } from '../helpers/author-data-builder'
+import { getErrorMessage } from '@/shared/constants/messages.constants'
 
 describe('AuthorsPrismaRepository Integration Tests', () => {
   let module: TestingModule
@@ -18,6 +19,7 @@ describe('AuthorsPrismaRepository Integration Tests', () => {
   })
 
   beforeEach(async () => {
+    await prisma.post.deleteMany()
     await prisma.author.deleteMany()
   })
 
@@ -29,7 +31,7 @@ describe('AuthorsPrismaRepository Integration Tests', () => {
     test('should throw not found error when id is not found', async () => {
       const uuid = '76d94a09-46a7-4cf5-be68-e8528e510f37'
       await expect(repository.findById(uuid)).rejects.toThrow(
-        new NotFoundError(`Author not found using ID: ${uuid}`),
+        new NotFoundError(getErrorMessage('Author', uuid).notFound),
       )
     })
 
@@ -57,7 +59,7 @@ describe('AuthorsPrismaRepository Integration Tests', () => {
         ...data,
       }
       await expect(repository.update(author)).rejects.toThrow(
-        new NotFoundError(`Author not found using ID: ${author.id}`),
+        new NotFoundError(getErrorMessage('Author', author.id).notFound),
       )
     })
 
@@ -76,7 +78,7 @@ describe('AuthorsPrismaRepository Integration Tests', () => {
     test('should throw not found error when trying to delete an author that is not found', async () => {
       const uuid = '76d94a09-46a7-4cf5-be68-e8528e510f37'
       await expect(repository.delete(uuid)).rejects.toThrow(
-        new NotFoundError(`Author not found using ID: ${uuid}`),
+        new NotFoundError(getErrorMessage('Author', uuid).notFound),
       )
     })
 

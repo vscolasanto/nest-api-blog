@@ -6,6 +6,7 @@ import { CreateAuthorUsecase } from './create-author.usecase'
 import { AuthorDataBuilder } from '../helpers/author-data-builder'
 import { BadRequestError } from '@/shared/errors/bad-request-error'
 import { ConflictError } from '@/shared/errors/conflict-error'
+import { getErrorMessage } from '@/shared/constants/messages.constants'
 
 describe('CreateAuthorUsecase Integration Tests', () => {
   let module: TestingModule
@@ -37,7 +38,7 @@ describe('CreateAuthorUsecase Integration Tests', () => {
       await usecase.execute(authorWithoutName)
     } catch (error) {
       expect(error).toBeInstanceOf(BadRequestError)
-      expect(error.message).toBe('Input data is not provided or invalid')
+      expect(error.message).toBe(getErrorMessage().inputDataInvalid)
     }
   })
 
@@ -48,7 +49,7 @@ describe('CreateAuthorUsecase Integration Tests', () => {
       await usecase.execute(authorWithourEmail)
     } catch (error) {
       expect(error).toBeInstanceOf(BadRequestError)
-      expect(error.message).toBe('Input data is not provided or invalid')
+      expect(error.message).toBe(getErrorMessage().inputDataInvalid)
     }
   })
 
@@ -65,7 +66,7 @@ describe('CreateAuthorUsecase Integration Tests', () => {
       await usecase.execute(authorWithSameEmail)
     } catch (error) {
       expect(error).toBeInstanceOf(ConflictError)
-      expect(error.message).toBe('Email address already in use')
+      expect(error.message).toBe(getErrorMessage().emailAlreadyExists)
     }
   })
 

@@ -5,6 +5,7 @@ import { NotFoundError } from '@/shared/errors/not-found-error'
 import { PostsPrismaRepository } from './posts-prisma.repository'
 import { PostDataBuilder } from '../helpers/post-data-builder'
 import { AuthorDataBuilder } from '@/authors/helpers/author-data-builder'
+import { getErrorMessage } from '@/shared/constants/messages.constants'
 
 describe('PostsPrismaRepository Integration Tests', () => {
   let module: TestingModule
@@ -20,6 +21,7 @@ describe('PostsPrismaRepository Integration Tests', () => {
 
   beforeEach(async () => {
     await prisma.post.deleteMany()
+    await prisma.author.deleteMany()
   })
 
   afterAll(async () => {
@@ -30,7 +32,7 @@ describe('PostsPrismaRepository Integration Tests', () => {
     test('should throw not found error when id is not found', async () => {
       const uuid = '76d94a09-46a7-4cf5-be68-e8528e510f37'
       await expect(repository.findById(uuid)).rejects.toThrow(
-        new NotFoundError(`Post ${uuid} not found`),
+        new NotFoundError(getErrorMessage('Post', uuid).notFound),
       )
     })
 

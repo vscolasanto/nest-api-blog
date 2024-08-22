@@ -6,6 +6,7 @@ import { UpdateAuthorUsecase } from './update-author.usecase'
 import { AuthorDataBuilder } from '../helpers/author-data-builder'
 import { BadRequestError } from '@/shared/errors/bad-request-error'
 import { ConflictError } from '@/shared/errors/conflict-error'
+import { getErrorMessage } from '@/shared/constants/messages.constants'
 
 describe('UpdateAuthorUsecase Integration Tests', () => {
   let module: TestingModule
@@ -37,7 +38,7 @@ describe('UpdateAuthorUsecase Integration Tests', () => {
       await usecase.execute(authorWithoutName)
     } catch (error) {
       expect(error).toBeInstanceOf(BadRequestError)
-      expect(error.message).toBe('Id is not provided')
+      expect(error.message).toBe(getErrorMessage('Id').notProvided)
     }
   })
 
@@ -53,7 +54,7 @@ describe('UpdateAuthorUsecase Integration Tests', () => {
       await usecase.execute(secondAuthor)
     } catch (error) {
       expect(error).toBeInstanceOf(ConflictError)
-      expect(error.message).toBe('Email address already in use')
+      expect(error.message).toBe(getErrorMessage().emailAlreadyExists)
     }
   })
 

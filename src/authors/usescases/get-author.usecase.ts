@@ -2,6 +2,7 @@ import { BadRequestError } from '@/shared/errors/bad-request-error'
 import { AuthorsPrismaRepository } from '../repositories/authors-prisma.repository'
 import { IUsecase } from '@/shared/interfaces/usecase.interface'
 import { AuthorOutput } from '../dt/author-output.dto'
+import { getErrorMessage } from '@/shared/constants/messages.constants'
 
 export namespace GetAuthorUsecase {
   type Input = {
@@ -15,7 +16,7 @@ export namespace GetAuthorUsecase {
 
     async execute(input: Input): Promise<Output> {
       const { id } = input
-      if (!id) throw new BadRequestError('Id should be provided')
+      if (!id) throw new BadRequestError(getErrorMessage('Id').notProvided)
       const author = await this.authorsRepository.findById(id)
       return author
     }

@@ -6,6 +6,7 @@ import { DeleteAuthorUsecase } from './delete-author.usecase'
 import { AuthorDataBuilder } from '../helpers/author-data-builder'
 import { BadRequestError } from '@/shared/errors/bad-request-error'
 import { NotFoundError } from '@/shared/errors/not-found-error'
+import { getErrorMessage } from '@/shared/constants/messages.constants'
 
 describe('DeleteAuthorUsecase Integration Tests', () => {
   let module: TestingModule
@@ -35,7 +36,7 @@ describe('DeleteAuthorUsecase Integration Tests', () => {
       await usecase.execute(input)
     } catch (error) {
       expect(error).toBeInstanceOf(BadRequestError)
-      expect(error.message).toBe('Id should be provided')
+      expect(error.message).toBe(getErrorMessage('Id').notProvided)
     }
   })
 
@@ -45,7 +46,7 @@ describe('DeleteAuthorUsecase Integration Tests', () => {
       await usecase.execute(input)
     } catch (error) {
       expect(error).toBeInstanceOf(NotFoundError)
-      expect(error.message).toBe(`Author not found using ID: ${input.id}`)
+      expect(error.message).toBe(getErrorMessage('Author', input.id).notFound)
     }
   })
 

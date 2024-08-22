@@ -7,6 +7,7 @@ import {
 } from '../interfaces/author.repository'
 import { ICreateAuthor } from '../interfaces/create-author'
 import { NotFoundError } from '@/shared/errors/not-found-error'
+import { getErrorMessage } from '@/shared/constants/messages.constants'
 
 export class AuthorsPrismaRepository implements IAuthorsRepository {
   sortableFields: string[] = ['name', 'email', 'created_at']
@@ -82,7 +83,7 @@ export class AuthorsPrismaRepository implements IAuthorsRepository {
 
   async get(id: string): Promise<Author> {
     const author = await this.prisma.author.findUnique({ where: { id } })
-    if (!author) throw new NotFoundError(`Author not found using ID: ${id}`)
+    if (!author) throw new NotFoundError(getErrorMessage('Author', id).notFound)
     return author
   }
 }
